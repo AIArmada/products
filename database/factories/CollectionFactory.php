@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace AIArmada\Products\Database\Factories;
 
-use AIArmada\Products\Models\Category;
+use AIArmada\Products\Models\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<Category>
+ * @extends Factory<Collection>
  */
-class CategoryFactory extends Factory
+class CollectionFactory extends Factory
 {
-    protected $model = Category::class;
+    protected $model = Collection::class;
 
     /**
      * @return array<string, mixed>
@@ -26,7 +26,7 @@ class CategoryFactory extends Factory
             'name' => ucwords($name),
             'slug' => Str::slug($name),
             'description' => $this->faker->sentence(),
-            'parent_id' => null,
+            'type' => 'manual',
             'position' => $this->faker->numberBetween(0, 100),
             'status' => 'active',
             'visibility' => 'catalog',
@@ -51,10 +51,21 @@ class CategoryFactory extends Factory
         ]);
     }
 
-    public function childOf(Category $parent): static
+    public function automatic(): static
     {
         return $this->state(fn (array $attributes) => [
-            'parent_id' => $parent->id,
+            'type' => 'automatic',
+            'conditions' => [
+                ['field' => 'type', 'operator' => '=', 'value' => 'simple'],
+            ],
+        ]);
+    }
+
+    public function scheduled(?string $publishAt = null, ?string $unpublishAt = null): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'published_at' => $publishAt ?? now()->addDays(7),
+            'unpublished_at' => $unpublishAt,
         ]);
     }
 }
