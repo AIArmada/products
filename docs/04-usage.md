@@ -112,10 +112,8 @@ use AIArmada\Products\Enums\ProductStatus;
 use AIArmada\Products\Enums\ProductType;
 use AIArmada\Products\Models\Product;
 
-// `slug` is NOT NULL with no default and is not auto-generated — always pass it.
 $download = Product::query()->create([
     'name' => 'Digital Download',
-    'slug' => 'digital-download',
     'type' => ProductType::Digital,
     'status' => ProductStatus::Active,
     'price' => 4900,
@@ -123,7 +121,6 @@ $download = Product::query()->create([
 
 $ticket = Product::query()->create([
     'name' => 'Workshop Ticket',
-    'slug' => 'workshop-ticket',
     'type' => ProductType::Digital,
     'status' => ProductStatus::Active,
     'price' => 9700,
@@ -134,7 +131,6 @@ $ticket = Product::query()->create([
 
 $shirt = Product::query()->create([
     'name' => 'Configurable T-Shirt',
-    'slug' => 'configurable-t-shirt',
     'type' => ProductType::Configurable,
     'status' => ProductStatus::Active,
     'price' => 2999,
@@ -176,7 +172,8 @@ $size = Option::query()->create([
 
 $small = OptionValue::query()->create([
     'option_id' => $size->id,
-    'name' => 'Small', // the option value IS the name; there is no `value` column
+    'name' => 'Small',
+    'value' => 'S',
     'position' => 1,
 ]);
 
